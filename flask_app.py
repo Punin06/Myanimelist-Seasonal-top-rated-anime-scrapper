@@ -18,20 +18,16 @@ def index():
     driver = webdriver.Chrome(options=chrome_options)
     titles = []
     if request.method =="POST":
-        #driver = Safari()
+        
         url = "https://myanimelist.net/anime/season"
 
-
+        #Storing the seasons of the buttons
         x = request.form.get("btn1")
-        #print(x)
+        
         c = request.form.get("btn2")
-        #print(c)
+        
         v = request.form.get("btn3")
-        #print(v)
-
-        #print(request.form.get("btn2") == c)
-        #print(request.form.get("btn3") == v)
-
+        #Visiting the site for those seasons
         if request.form.get("btn1") == x and x!=None:
             url = f"https://myanimelist.net/anime/season/{x.split()[1]}/{x.split()[0]}"
 
@@ -40,11 +36,8 @@ def index():
 
         elif request.form.get("btn3") == v and v!=None:
             url = f"https://myanimelist.net/anime/season/{v.split()[1]}/{v.split()[0]}"
-
-        print (url)
-
+        #Setting up variable to store respecitve values and the BS
         driver.get(url)
-        #driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(5)
         soup = BeautifulSoup(driver.page_source, "html.parser")
         date = []
@@ -56,7 +49,7 @@ def index():
         df = pd.DataFrame()
         animes = soup.find_all("div", attrs = {"class" : "js-anime-category-producer seasonal-anime js-seasonal-anime js-anime-type-all js-anime-type-1"})
         szn = soup.find("a", attrs = {"class": "on"}).text.split()
-
+        #storing the values for the following
         for dates in animes:
             c = []
             day = dates.find("span", attrs = {"class" : "item"}).text
@@ -84,19 +77,9 @@ def index():
         df["links"] = links
         df["episode"] = episode
 
-
-        """
-        for i in range(1,6):
-            animes = soup.find_all("div", attrs = {"class" : "js-anime-category-producer seasonal-anime js-seasonal-anime js-anime-type-all js-anime-type-1"})
-            for dates in animes:
-                day = dates.find("span", attrs = {"class" : "item"}).text
-                scores = dates.find("span", attrs = {"class":"js-score"}).text
-                date.append(day)
-                score.append(scores)
-        """
         driver.close()
         df = df.sort_values(by = ["score"], ascending = False)
-
+        #Checking and dropping animes that have started before the current season years
         for index in (df.index):
             temp = int(str(df["date"][index]).split("-")[2])
             if(temp >= int(szn[1])):
@@ -121,7 +104,3 @@ def anime ():
 
 if __name__ =="__main__":
     app.run(debug = True)
-
-#headless browsing not out for Safari
-
-
