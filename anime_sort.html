@@ -1,0 +1,31 @@
+<!Doctype html>
+<html>
+<title>
+Anime category Result!
+</title>
+<body>
+	<p> Welcome!</p>
+<script>
+var sort = JSON.parse(sessionStorage.getItem("jsArray"));
+var images = JSON.parse(sessionStorage.getItem("jsImage"));
+var score = JSON.parse(sessionStorage.getItem("jsScore"));
+var genres = JSON.parse(sessionStorage.getItem("jsGenre"));
+var episode = JSON.parse(sessionStorage.getItem("jsEpisode"));
+var date = JSON.parse(sessionStorage.getItem("jsDate"));
+//console.log(sort);
+for (x =0; x<sort.length; x++)
+{
+	//console.log(sort[x]);
+	document.write("<p>" + "Ranking: " + (x+1) + "</p>");
+	document.write("<p>" + episode[x] + "</p>");
+	document.write("<p>" + "Release date: " + date[x] + "</p>");
+	document.write("<p>" + sort[x] +  "</p>");
+	for (i of genres[x]){
+	document.write("<span>" + i + " " + "</span>");}
+	document.write("<p>" + "Score: " + score[x] +  "</p>");
+    document.write("<img src =" + images[x] + ">" + "</img>");
+}
+//console.log(images);
+</script>
+</body>
+</html>
